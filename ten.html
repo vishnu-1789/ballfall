@@ -1,0 +1,118 @@
+<html>
+<body>
+<script src = "p5.min.js"></script>
+<script>
+var b;    
+var bc = []; 
+var n= 2
+var ro;
+var score = 0;
+function addball(){
+    console.log("m")
+    bc.push(new Ball())
+}
+
+function setup(){
+    createCanvas(1000,600)
+    setInterval(addball,1000)
+    
+    ro = new Bar()
+}
+
+class Bar {
+    constructor(){
+        this.x = 500
+        this.y = 550
+        this.l = 150
+        this.b = 30
+        this.inc = 20
+    }
+    posupdate(){
+        
+        if(keyIsDown(LEFT_ARROW)){this.x = this.x - this.inc}
+        if(keyIsDown(RIGHT_ARROW)){this.x = this.x + this.inc}
+        push();
+        fill(255,0,0)
+        rect(this.x,this.y,this.l,this.b)
+        //console.log("m")
+        pop();
+    }
+
+
+
+
+} 
+
+class Ball {
+    constructor(){
+        this.r = 20;
+        this.x = Math.floor(1000*Math.random())
+        this.y = 0
+        this.speed = 10
+        this.state = "u"
+    }
+
+    fall() {
+        this.state = "u"
+        push()
+        fill(100,100,255)
+        ellipse(this.x,this.y,this.r,this.r)
+        pop()
+        this.y = this.y + this.speed
+    }
+    iscomplete(){
+        if(this.y > 700){
+            return true
+        }
+        else{return false}
+
+    }
+} //end class ball
+function checkfall(d){
+    if(d.y + d.r >= ro.y){
+        if(d.x >= ro.x && d.x <= ro.x + ro.l){
+            d.state = "c"
+            score++
+        }
+        else{
+            d.state =  "f"
+            score--
+        }    
+
+    }
+    else{
+        d.state = "u"
+    }   
+}
+
+ 
+function draw(){
+    background(0,0,0)
+    //b = new Ball()
+    for(let i = 0;i < bc.length;i++){
+        //ro.posupdate()
+        if(bc[i].state == "u"){
+            bc[i].fall()
+            //if(bc[i].iscomplete() == true){
+               // alert("game over")
+            //}
+            if(checkfall(bc[i]) == "c"){
+                console.log("c")
+            }    
+        }
+    }
+    const s = "Score: " + score
+    push()
+    fill(255,255,255)
+    text(s,400,10,600,100)
+    pop()
+    ro.posupdate()
+    //rect(30,30,30,30)
+}
+
+
+
+
+</script>
+</body>
+</html>
